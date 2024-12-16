@@ -44,7 +44,7 @@ def copy_to_clipboard(content):
     process.communicate(input=content.encode("utf-8"))
 
 def print_help():
-    print("""Usage: aiprep.py [OPTIONS] <file1> <file2> ... <fileN>
+    print("""Usage: aiprep [OPTIONS] <file1> <file2> ... <fileN>
 Options:
   --help         Show this help message and exit.
   -c             Combine the content of files into a clipboard-friendly format with codeblocks.
