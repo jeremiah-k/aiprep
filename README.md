@@ -10,6 +10,7 @@ A key feature of this script is its ability to reformat markdown-style code bloc
 
 - Combine multiple files into a single, clipboard-ready output.
 - Format the output with filenames and ``backticks`` for code blocks.
+- Recursively collect files matching patterns with `--recursive`.
 - Remove or re-add ``backticks`` to ensure correct rendering in AI prompts and responses.
 - Skip invalid files with a warning, ensuring smooth processing.
 
@@ -19,9 +20,9 @@ When pasting formatted content into AI tools, the rendered markdown can sometime
 - If markdown is left unprocessed, code blocks might not render correctly when AI responds.
 - By removing and re-adding code block delimiters (``backticks``), the script ensures that your input retains the correct format and structure. This allows the AI to display and interpret code blocks correctly without inadvertently rendering markdown in its output.
 
-The `--db` and `--rb` options allow you to address this issue:
-- `--db`: Replace triple backticks with double backticks (``) to prevent markdown rendering in AI outputs.
-- `--rb`: Restore triple backticks after processing to re-enable proper code block formatting.
+The `--deblock` and `--reblock` options allow you to address this issue:
+- `-d`, `--deblock`: Replace triple backticks with double backticks (```) to prevent markdown rendering in AI outputs.
+- `-r`, `--reblock`: Restore triple backticks after processing to re-enable proper code block formatting.
 
 ## Installation
 
@@ -41,10 +42,11 @@ The `--db` and `--rb` options allow you to address this issue:
 Run the script with the desired functionality using the following options:
 
 ### Options
-- `-c`: Combine multiple files into a single clipboard-friendly format with filenames and codeblocks.
-- `--db`: Replace triple backticks with double backticks (``) in the specified files.
-- `--rb`: Replace double backticks (``) with triple backticks in the specified files.
-- `--help`: Show usage instructions.
+- `-c`, `--combine`: Combine multiple files into a single clipboard-friendly format with filenames and codeblocks.
+- `-d`, `--deblock`: Replace triple backticks with double backticks (```) in the specified files.
+- `-r`, `--reblock`: Replace double backticks (```) with triple backticks in the specified files.
+- `--recursive`: Recursively include files matching the given glob patterns.
+- `-h`, `--help`: Show usage instructions.
 
 ### Examples
 
@@ -52,31 +54,36 @@ Run the script with the desired functionality using the following options:
 ```bash
 ./aiprep -c file1.py file2.py file3.py
 ```
-This combines the content of the specified files, formats them with filenames and triple backticks, and copies the result to your clipboard.
+
+#### Recursively Combine All ```.py``` Files
+```bash
+./aiprep -c --recursive "*.py"
+```
+
+This combines the content of all Python files in the current directory and subdirectories, formats them with filenames and triple backticks, and copies the result to your clipboard.
 
 #### Modify Codeblocks
 Replace triple backticks with double backticks:
 ```bash
-./aiprep --db file1.md file2.md
+./aiprep -d file1.md file2.md
 ```
 
 Restore double backticks to triple backticks:
 ```bash
-./aiprep --rb file1.md file2.md
+./aiprep -r file1.md file2.md
 ```
 
 #### Help
 ```bash
-./aiprep --help
+./aiprep -h
 ```
 
 ### Expected Output (Copied to Clipboard)
 
 For `-c`, the combined output will have the following format:
 
-```text
 file1.py:
-```
+```text
 <contents of file1.py>
 ```
 
@@ -94,7 +101,8 @@ file3.py:
 ## Notes
 
 - Ensure all specified files exist. Non-existent or invalid file paths will be skipped with a warning.
-- Use the `--db` and `--rb` options carefully to handle code block rendering issues when interacting with AI tools.
+- Use the `--deblock` and `--reblock` options carefully to handle code block rendering issues when interacting with AI tools.
+- `--recursive` works with glob patterns (e.g., `"*.py"`) to collect matching files in all directories.
 
 ## Purpose
 
