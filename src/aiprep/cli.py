@@ -78,6 +78,9 @@ def main():
         combined_content = combine_files(files)
         copy_to_clipboard(combined_content)
         print("Combined content copied to clipboard.")
+        print("Files copied:")
+        for f in files:
+            print(f"  - {f}")
     elif option in ("-d", "--deblock"):
         if not files:
             print("Error: No files provided for deblocking.")
