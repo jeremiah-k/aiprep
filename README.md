@@ -26,22 +26,28 @@ The `--deblock` and `--reblock` options allow you to address this issue:
 
 ## Installation
 
-1. Ensure Python 3 is installed on your system.
-2. Install `xclip` for clipboard functionality:
-   ```bash
-   sudo apt-get install xclip
-   ```
-3. Download or clone the script into your preferred directory.
-4. Make the script executable:
-   ```bash
-   chmod +x aiprep
-   ```
+### Install from PyPI
+
+```bash
+pip install aiprep
+```
+
+### System dependencies
+
+For clipboard functionality, ensure you have `xclip` installed (Linux):
+
+```bash
+sudo apt-get install xclip
+```
+
+> Note: macOS and Windows clipboard support works out of the box via `pyperclip` dependency.
 
 ## Usage
 
 Run the script with the desired functionality using the following options:
 
 ### Options
+
 - `-c`, `--combine`: Combine multiple files into a single clipboard-friendly format with filenames and codeblocks.
 - `-d`, `--deblock`: Replace triple backticks with double backticks (```) in the specified files.
 - `-r`, `--reblock`: Replace double backticks (```) with triple backticks in the specified files.
@@ -51,31 +57,37 @@ Run the script with the desired functionality using the following options:
 ### Examples
 
 #### Combine Files into Clipboard
+
 ```bash
-./aiprep -c file1.py file2.py file3.py
+aiprep -c file1.py file2.py file3.py
 ```
 
 #### Recursively Combine All ```.py``` Files
+
 ```bash
-./aiprep -c --recursive "*.py"
+aiprep -c --recursive "*.py"
 ```
 
 This combines the content of all Python files in the current directory and subdirectories, formats them with filenames and triple backticks, and copies the result to your clipboard.
 
 #### Modify Codeblocks
+
 Replace triple backticks with double backticks:
+
 ```bash
-./aiprep -d file1.md file2.md
+aiprep -d file1.md file2.md
 ```
 
 Restore double backticks to triple backticks:
+
 ```bash
-./aiprep -r file1.md file2.md
+aiprep -r file1.md file2.md
 ```
 
 #### Help
+
 ```bash
-./aiprep -h
+aiprep -h
 ```
 
 ### Expected Output (Copied to Clipboard)
@@ -83,26 +95,28 @@ Restore double backticks to triple backticks:
 For `-c`, the combined output will have the following format:
 
 file1.py:
+
 ```text
 <contents of file1.py>
 ```
 
 file2.py:
+
 ```text
 <contents of file2.py>
 ```
 
 file3.py:
+
 ```text
 <contents of file3.py>
 ```
-
 
 ## Notes
 
 - Ensure all specified files exist. Non-existent or invalid file paths will be skipped with a warning.
 - Use the `--deblock` and `--reblock` options carefully to handle code block rendering issues when interacting with AI tools.
-- `--recursive` works with glob patterns (e.g., `"*.py"`) to collect matching files in all directories.
+- `--recursive` works with glob patterns (e.g., "*.py") to collect matching files in all directories.
 
 ## Purpose
 
@@ -111,3 +125,4 @@ This script is designed to optimize workflows for loading multiple source code f
 ## License
 
 Feel free to use, modify, and distribute this script as needed. No restrictions apply.
+
