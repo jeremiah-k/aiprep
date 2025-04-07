@@ -1,11 +1,12 @@
 """Command-line interface for aiprep."""
 
 import sys
+
 from .core import (
     combine_files,
+    copy_to_clipboard,
     deblock_file,
     reblock_file,
-    copy_to_clipboard,
     recursive_glob,
 )
 

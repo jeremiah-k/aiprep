@@ -3,16 +3,15 @@
 import glob
 import os
 import subprocess
-import sys
 
 
 def combine_files(file_list):
     """
     Combine multiple files into a single formatted string.
-    
+
     Args:
         file_list (list): List of file paths to combine.
-        
+
     Returns:
         str: Combined content with filenames and code blocks.
     """
@@ -31,7 +30,7 @@ def combine_files(file_list):
 def deblock_file(file_path):
     """
     Replace triple backticks with double backticks in a file.
-    
+
     Args:
         file_path (str): Path to the file to modify.
     """
@@ -49,7 +48,7 @@ def deblock_file(file_path):
 def reblock_file(file_path):
     """
     Replace double backticks with triple backticks in a file.
-    
+
     Args:
         file_path (str): Path to the file to modify.
     """
@@ -67,7 +66,7 @@ def reblock_file(file_path):
 def copy_to_clipboard(content):
     """
     Copy content to the system clipboard.
-    
+
     Args:
         content (str): Content to copy to clipboard.
     """
@@ -80,10 +79,10 @@ def copy_to_clipboard(content):
 def recursive_glob(pattern):
     """
     Recursively find files matching a pattern.
-    
+
     Args:
         pattern (str): Glob pattern to match.
-        
+
     Returns:
         list: List of file paths matching the pattern.
     """
