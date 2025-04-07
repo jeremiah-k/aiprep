@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
+import glob
 import os
 import subprocess
 import sys
-import glob
+
 
 def combine_files(file_list):
     combined_content = []
@@ -16,6 +17,7 @@ def combine_files(file_list):
         combined_content.append("```\n")
     return "\n".join(combined_content)
 
+
 def deblock_file(file_path):
     if not os.path.isfile(file_path):
         print(f"Error: {file_path} is not a valid file.")
@@ -26,6 +28,7 @@ def deblock_file(file_path):
     with open(file_path, "w") as f:
         f.write(updated_content)
     print(f"Updated {file_path}: triple backticks changed to double backticks.")
+
 
 def reblock_file(file_path):
     if not os.path.isfile(file_path):
@@ -38,24 +41,30 @@ def reblock_file(file_path):
         f.write(updated_content)
     print(f"Updated {file_path}: double backticks changed to triple backticks.")
 
+
 def copy_to_clipboard(content):
     process = subprocess.Popen(
         ["xclip", "-selection", "clipboard"], stdin=subprocess.PIPE
     )
     process.communicate(input=content.encode("utf-8"))
 
+
 def print_help():
-    print("""Usage: aiprep [OPTIONS] <file1> <file2> ... <fileN>
+    print(
+        """Usage: aiprep [OPTIONS] <file1> <file2> ... <fileN>
 Options:
   -h, --help            Show this help message and exit.
   -c, --combine         Combine the content of files into a clipboard-friendly format with codeblocks.
   -d, --deblock         Change all triple backticks (```) to double backticks (``) in the specified files.
   -r, --reblock         Change all double backticks (``) to triple backticks (```) in the specified files.
   --recursive           Recursively include files matching the given glob patterns.
-""")
+"""
+    )
+
 
 def recursive_glob(pattern):
-    return [y for x in os.walk('.') for y in glob.glob(os.path.join(x[0], pattern))]
+    return [y for x in os.walk(".") for y in glob.glob(os.path.join(x[0], pattern))]
+
 
 def main():
     if len(sys.argv) < 2:
@@ -66,9 +75,9 @@ def main():
     args = sys.argv[2:]
 
     recursive = False
-    if '--recursive' in args:
+    if "--recursive" in args:
         recursive = True
-        args.remove('--recursive')
+        args.remove("--recursive")
 
     files = list(args)
 
@@ -105,6 +114,7 @@ def main():
         print(f"Error: Unknown option '{option}'.")
         print_help()
         sys.exit(1)
+
 
 if __name__ == "__main__":
     main()
