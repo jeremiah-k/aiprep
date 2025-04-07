@@ -1,6 +1,8 @@
-"""Command-line interface for aiprep."""
+"""aiprep - A tool for preparing files for AI interactions."""
 
-from .cli import main
+try:
+    from importlib.metadata import version
+except ImportError:
+    from importlib_metadata import version  # Python < 3.8
 
-if __name__ == "__main__":
-    main()
+__version__ = version("aiprep")

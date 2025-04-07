@@ -20,6 +20,12 @@ Options:
   -d, --deblock         Change all triple backticks (```) to double backticks (``) in the specified files.
   -r, --reblock         Change all double backticks (``) to triple backticks (```) in the specified files.
   --recursive           Recursively include files matching the given glob patterns.
+
+Examples:
+  aiprep -c file1 file2 file3
+  aiprep -c --recursive "*.py"
+  aiprep -d file1 file2
+  aiprep -r file1 file2
 """
     )
 
@@ -43,17 +49,28 @@ def main():
         if not args:
             print("Error: --recursive requires at least one pattern.")
             sys.exit(1)
-        patterns = args
-        for pattern in patterns:
-            found = recursive_glob(pattern)
-            files.extend(found)
+        # Each argument is treated as a glob pattern
+        for pattern in args:
+            matched = recursive_glob(pattern)
+            if matched:
+                files.extend(matched)
+            else:
+                print(f"Warning: {pattern} matched no files. Skipping.")
     else:
-        files = list(args)
+        files = args
 
-    files = list(dict.fromkeys(files))  # Deduplicate
+    # Deduplicate while preserving order
+    seen = set()
+    deduped = []
+    for f in files:
+        if f not in seen:
+            deduped.append(f)
+            seen.add(f)
+    files = deduped
 
     if option in ("-h", "--help"):
         print_help()
+        sys.exit(0)
     elif option in ("-c", "--combine"):
         if not files:
             print("Error: No files provided for combining.")
