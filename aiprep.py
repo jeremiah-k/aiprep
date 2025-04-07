@@ -1,9 +1,8 @@
 #!/usr/bin/env python3
 import glob
 import os
-import subprocess
 import sys
-
+import pyperclip
 
 def combine_files(file_list):
     combined_content = []
@@ -17,7 +16,6 @@ def combine_files(file_list):
         combined_content.append("```\n")
     return "\n".join(combined_content)
 
-
 def deblock_file(file_path):
     if not os.path.isfile(file_path):
         print(f"Error: {file_path} is not a valid file.")
@@ -28,7 +26,6 @@ def deblock_file(file_path):
     with open(file_path, "w") as f:
         f.write(updated_content)
     print(f"Updated {file_path}: triple backticks changed to double backticks.")
-
 
 def reblock_file(file_path):
     if not os.path.isfile(file_path):
@@ -41,13 +38,12 @@ def reblock_file(file_path):
         f.write(updated_content)
     print(f"Updated {file_path}: double backticks changed to triple backticks.")
 
-
 def copy_to_clipboard(content):
-    process = subprocess.Popen(
-        ["xclip", "-selection", "clipboard"], stdin=subprocess.PIPE
-    )
-    process.communicate(input=content.encode("utf-8"))
-
+    try:
+        pyperclip.copy(content)
+        print("Combined content copied to clipboard.")
+    except pyperclip.PyperclipException as e:
+        print(f"Error copying to clipboard: {e}")
 
 def print_help():
     print(
@@ -61,10 +57,8 @@ Options:
 """
     )
 
-
 def recursive_glob(pattern):
     return [y for x in os.walk(".") for y in glob.glob(os.path.join(x[0], pattern))]
-
 
 def main():
     if len(sys.argv) < 2:
@@ -97,7 +91,6 @@ def main():
             sys.exit(1)
         combined_content = combine_files(files)
         copy_to_clipboard(combined_content)
-        print("Combined content copied to clipboard.")
     elif option in ("-d", "--deblock"):
         if not files:
             print("Error: No files provided for deblocking.")
@@ -114,7 +107,6 @@ def main():
         print(f"Error: Unknown option '{option}'.")
         print_help()
         sys.exit(1)
-
 
 if __name__ == "__main__":
     main()
