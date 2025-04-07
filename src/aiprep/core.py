@@ -2,19 +2,11 @@
 
 import glob
 import os
-import subprocess
+
+import pyperclip
 
 
 def combine_files(file_list):
-    """
-    Combine multiple files into a single formatted string.
-
-    Args:
-        file_list (list): List of file paths to combine.
-
-    Returns:
-        str: Combined content with filenames and code blocks.
-    """
     combined_content = []
     for file_path in file_list:
         if not os.path.isfile(file_path):
@@ -28,12 +20,6 @@ def combine_files(file_list):
 
 
 def deblock_file(file_path):
-    """
-    Replace triple backticks with double backticks in a file.
-
-    Args:
-        file_path (str): Path to the file to modify.
-    """
     if not os.path.isfile(file_path):
         print(f"Error: {file_path} is not a valid file.")
         return
@@ -46,12 +32,6 @@ def deblock_file(file_path):
 
 
 def reblock_file(file_path):
-    """
-    Replace double backticks with triple backticks in a file.
-
-    Args:
-        file_path (str): Path to the file to modify.
-    """
     if not os.path.isfile(file_path):
         print(f"Error: {file_path} is not a valid file.")
         return
@@ -64,26 +44,11 @@ def reblock_file(file_path):
 
 
 def copy_to_clipboard(content):
-    """
-    Copy content to the system clipboard.
-
-    Args:
-        content (str): Content to copy to clipboard.
-    """
-    process = subprocess.Popen(
-        ["xclip", "-selection", "clipboard"], stdin=subprocess.PIPE
-    )
-    process.communicate(input=content.encode("utf-8"))
+    try:
+        pyperclip.copy(content)
+    except pyperclip.PyperclipException as e:
+        print(f"Error copying to clipboard: {e}")
 
 
 def recursive_glob(pattern):
-    """
-    Recursively find files matching a pattern.
-
-    Args:
-        pattern (str): Glob pattern to match.
-
-    Returns:
-        list: List of file paths matching the pattern.
-    """
     return [y for x in os.walk(".") for y in glob.glob(os.path.join(x[0], pattern))]
