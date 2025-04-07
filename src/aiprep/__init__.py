@@ -1,8 +1,8 @@
-"""
-aiprep - A tool for preparing files for AI interactions.
+"""aiprep - A tool for preparing files for AI interactions."""
 
-This package provides utilities for combining files, formatting code blocks,
-and handling clipboard operations for AI interactions.
-"""
+try:
+    from importlib.metadata import version
+except ImportError:
+    from importlib_metadata import version  # Python < 3.8
 
-__version__ = "0.1.0"
+__version__ = version("aiprep")
