@@ -2,9 +2,10 @@
 
 import glob
 import os
-
-import pyperclip
 import subprocess
+
+import pathspec
+import pyperclip
 
 
 def combine_files(file_list):
@@ -58,24 +59,34 @@ def copy_to_clipboard(content):
 
 
 def recursive_glob(pattern, root_dir="."):
-    """Recursively find files matching pattern from root_dir.
+    """Recursively find files matching pattern from root_dir, respecting .gitignore."""
 
-    Args:
-        pattern: Glob pattern to match (e.g. "*.py")
-        root_dir: Starting directory (defaults to current dir)
-
-    Returns:
-        List of matching file paths
-    """
     if not isinstance(pattern, str):
         raise TypeError("pattern must be a string")
 
+    gitignore_path = os.path.join(root_dir, ".gitignore")
+    if os.path.exists(gitignore_path):
+        with open(gitignore_path) as f:
+            spec = pathspec.PathSpec.from_lines("gitwildmatch", f)
+    else:
+        spec = pathspec.PathSpec.from_lines("gitwildmatch", [])
+
     matches = []
     try:
-        for entry in os.walk(root_dir):
-            dirpath = entry[0]
+        for dirpath, dirnames, _ in os.walk(root_dir):
+            dirnames[:] = [
+                d
+                for d in dirnames
+                if not spec.match_file(
+                    os.path.relpath(os.path.join(dirpath, d), root_dir)
+                )
+            ]
+
             full_pattern = os.path.join(dirpath, pattern)
-            matches.extend(glob.glob(full_pattern))
+            for path in glob.glob(full_pattern):
+                rel_path = os.path.relpath(path, root_dir)
+                if not spec.match_file(rel_path):
+                    matches.append(path)
     except (OSError, TypeError) as e:
         raise ValueError(f"Invalid directory or pattern: {e}") from e
 
